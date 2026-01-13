@@ -1,0 +1,161 @@
+/* Additional styles for the popup */
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.header .logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-dark);
+}
+
+.footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Error message container styles */
+.error-container {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #fff6f6;
+  border: 1px solid #e0b4b4;
+  border-radius: var(--border-radius);
+  color: #9f3a38;
+}
+
+.error-container.success {
+  background-color: #f8fffa;
+  border: 1px solid #a3d9b1;
+  color: #2c7c44;
+}
+
+.error-message {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.success-message {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #2c7c44;
+  font-weight: 500;
+}
+
+.error-container .button {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Icon styles */
+.icon-generate, .icon-letter, .icon-apply, .icon-download {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon-generate {
+  background-image: url('../assets/icons/generate.png');
+}
+
+.icon-letter {
+  background-image: url('../assets/icons/letter.png');
+}
+
+.icon-apply {
+  background-image: url('../assets/icons/apply.png');
+}
+
+.icon-download {
+  background-image: url('../assets/icons/download.png');
+}
+
+.loading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid var(--primary-color);
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.cancel-button {
+  background-color: #f2f2f2;
+  color: #666;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  padding: 6px 12px;
+  margin-top: 15px;
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+.cancel-button:hover {
+  background-color: #e6e6e6;
+  color: #333;
+}
+
+.location-info {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.location-indicator {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+  text-align: center;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 

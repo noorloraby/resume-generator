@@ -1,0 +1,140 @@
+/* History Page Styles */
+.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+#search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+#search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.table-container {
+  margin-bottom: 20px;
+  overflow-x: auto;
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: var(--light-gray);
+  font-weight: 600;
+  color: var(--text-dark);
+  position: sticky;
+  top: 0;
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 120, 255, 0.05);
+}
+
+.empty-message {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-light);
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+}
+
+.action-button:hover {
+  background-color: rgba(0, 120, 255, 0.1);
+}
+
+.date-column {
+  white-space: nowrap;
+}
+
+.filename-column, .job-title-column, .company-column {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Link styles in table */
+.job-link, .company-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.job-link:hover, .company-link:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+.job-link:visited, .company-link:visited {
+  color: #6050b0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .history-container {
+    padding: 10px;
+  }
+  
+  th, td {
+    padding: 8px;
+  }
+} 

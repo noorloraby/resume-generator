@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Tailor - Settings</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/settings.css">
+  <style>
+    body {
+      min-width: 700px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <header>
+      <div class="logo-container">
+        <img src="../assets/icons/icon48.png" alt="Resume Tailor Logo" class="logo">
+        <h1>Resume Tailor</h1>
+      </div>
+    </header>
+
+    <div class="tab-container">
+      <div class="tab active" data-tab="personal-info">Personal Info</div>
+      <div class="tab" data-tab="extension-settings">Extension Settings</div>
+    </div>
+
+    <div id="personal-info" class="tab-content active">
+      <div class="two-column-layout">
+        <div class="column">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="Your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Your email address">
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" id="phoneNumber" placeholder="Your phone number">
+          </div>
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="City, State">
+            <div class="toggle-container">
+              <input type="checkbox" id="use-job-location" class="toggle-input">
+              <label for="use-job-location" class="toggle-label">Auto-detect job location</label>
+              <p class="toggle-description">Try to use location from job posting (your location will be used as fallback)</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="linkedinUrl">LinkedIn URL</label>
+            <input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/yourprofile">
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="form-group">
+            <label for="profilePhoto">Profile Photo</label>
+            <div class="profile-photo-container">
+              <img id="profile-preview" class="profile-picture" src="../assets/icons/profile-placeholder.png" alt="Profile picture">
+              <div class="upload-button-container">
+                <button id="upload-photo-btn" class="button">Upload Photo</button>
+                <input type="file" id="profilePhoto" accept="image/*" style="display: none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="uploadCV">Upload CV (PDF,DOCX,TXT)</label>
+            <div class="upload-area" id="cv-upload-area">
+              <img src="../assets/icons/upload-icon.png" alt="Upload" class="upload-icon">
+              <p>Click to upload or drag and drop your CV here</p>
+              <p class="file-type">(PDF,Docx,Txt format only)</p>
+              <input type="file" id="uploadCV" accept=".pdf,.docx,.txt" style="display: none;">
+            </div>
+            <div id="cv-filename" class="filename"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="extension-settings" class="tab-content">
+      <div class="form-group">
+        <label for="relevancyPower">Relevancy Power</label>
+        <p class="description">Adjust how closely your generated resume will match the job description.</p>
+        <div class="slider-container">
+          <input type="range" id="relevancyPower" min="0" max="100" value="50">
+          <div class="slider-labels">
+            <span>More Generic</span>
+            <span>More Targeted</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="resumeNameFormat">Generated Resume Filename Format</label>
+        <p class="description">Customize how your generated resume files will be named. Available variables: {job_title}, {company}, {name}</p>
+        <input type="text" id="resumeNameFormat" value="{job_title}_Resume_{name}">
+      </div>
+
+      <div class="form-group">
+        <label for="saveLocation">Resume Storage Folder (Optional)</label>
+        <p class="description">Specify a folder name where your generated resumes will be stored (within Chrome's default download location).</p>
+        <div class="save-location-container">
+          <input type="text" id="saveLocation" placeholder="e.g., 'Job_Resumes'" maxlength="50">
+        </div>
+        <p class="note">Files will be saved to: Downloads/[Your Folder Name]</p>
+      </div>
+
+      <div class="form-group">
+        <label>Resume Template</label>
+        <p class="description">Select your preferred resume template style.</p>
+        <div class="template-options">
+          <div class="template-option active" data-template="professional">
+            <img src="../assets/templates/professional.png" alt="Professional template">
+            <span>Professional</span>
+          </div>
+          <div class="template-option" data-template="modern">
+            <img src="../assets/templates/modern.png" alt="Modern template">
+            <span>Modern</span>
+          </div>
+          <div class="template-option" data-template="creative">
+            <img src="../assets/templates/creative.png" alt="Creative template">
+            <span>Creative</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button id="save-settings" class="button primary-button">Save Changes</button>
+    </div>
+
+    <div id="success-message" class="success-message" style="display: none;">
+      ✓ Settings saved successfully!
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+  <script src="data-management.js"></script>
+</body>
+</html> 

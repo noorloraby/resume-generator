@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Hunter</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <img src="../assets/icons/icon48.png" alt="Job Hunter Logo" class="logo">
+      <h2>Job Hunter</h2>
+    </div>
+    
+    <div id="detected-job-title" class="job-title">
+      Senior Product Designer
+    </div>
+    
+    <button id="generate-cv-btn" class="button primary-button">
+      <i class="icon-generate"></i> Generate Tailored CV
+    </button>
+    
+    <button id="write-cover-letter-btn" class="button secondary-button">
+      <i class="icon-letter"></i> Write Cover Letter
+    </button>
+    
+    <button id="auto-apply-btn" class="button tertiary-button">
+      <i class="icon-apply"></i> Auto Apply to Jobs
+    </button>
+    
+    <div id="loading" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Generating your tailored resume...</p>
+    </div>
+    
+    <div id="download-section" style="display: none;">
+      <button id="download-cv-btn" class="button primary-button">
+        <i class="icon-download"></i> Download CV
+      </button>
+    </div>
+    
+    <!-- Error container for validation errors -->
+    <div id="error-container" class="error-container" style="display: none;">
+      <!-- Content will be populated by JavaScript -->
+    </div>
+    
+    <div class="footer">
+      <a href="../settings/settings.html" id="settings-link">Settings</a>
+      <a href="../history/history.html" id="history-link">History</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 

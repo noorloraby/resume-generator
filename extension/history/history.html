@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Tailor - History</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/history.css">
+  <style>
+    body {
+      min-width: 850px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="history-container">
+    <header>
+      <div class="logo-container">
+        <img src="../assets/icons/icon48.png" alt="Resume Tailor Logo" class="logo">
+        <h1>Resume Generation History</h1>
+      </div>
+    </header>
+
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search by job title, company name, or CV filename...">
+    </div>
+
+    <div class="table-container">
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th>CV Filename</th>
+            <th>Job Title</th>
+            <th>Company Name</th>
+            <th>Generated Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="history-table-body">
+          <!-- Table rows will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="empty-history" class="empty-message" style="display: none;">
+      <p>No resume generation history found.</p>
+      <p>Your history will appear here once you've generated tailored resumes.</p>
+    </div>
+
+    <div class="button-container">
+      <a href="../popup/popup.html" class="button secondary-button">Back to Extension</a>
+      <button id="clear-history" class="button tertiary-button">Clear History</button>
+    </div>
+  </div>
+
+  <script src="history.js"></script>
+</body>
+</html> 

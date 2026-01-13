@@ -1,0 +1,13 @@
+[Unit]
+Description=Resume Generator API
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/resumegenerator
+Environment="PATH=/home/resumegenerator/venv/bin"
+ExecStart=/home/resumegenerator/venv/bin/uvicorn resume_generator_api:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target 
