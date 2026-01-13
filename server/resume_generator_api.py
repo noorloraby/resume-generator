@@ -134,6 +134,10 @@ def call_openrouter_api(system_prompt: str, user_prompt: str) -> str:
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+    # Skip logging for health check endpoint to reduce noise
+    if request.url.path == "/health":
+        return await call_next(request)
+    
     logger.info(f"New request: {request.method} {request.url}")
     try:
         response = await call_next(request)
