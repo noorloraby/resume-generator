@@ -10,12 +10,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Check if the current job has been applied to before
     const jobId = extractJobId();
     console.log("content.js: Got checkJobHistory request, extracted job ID:", jobId);
-    
+
     if (jobId) {
       chrome.runtime.sendMessage({
         action: "checkJobInHistory",
         jobId: jobId
-      }, function(response) {
+      }, function (response) {
         console.log("content.js: Received checkJobInHistory response:", response);
         sendResponse(response);
       });
@@ -32,31 +32,31 @@ function extractJobId() {
   try {
     const url = window.location.href;
     console.log("content.js: Extracting job ID from URL:", url);
-    
+
     // Try to extract from currentJobId parameter
     const currentJobIdMatch = url.match(/currentJobId=(\d+)/);
     if (currentJobIdMatch && currentJobIdMatch[1]) {
       return currentJobIdMatch[1];
     }
-    
+
     // Try to extract from job ID in the path
     const jobPathMatch = url.match(/\/jobs\/view\/(\d+)/);
     if (jobPathMatch && jobPathMatch[1]) {
       return jobPathMatch[1];
     }
-    
+
     // Try to extract from job ID in the path (alternative format)
     const jobPathMatch2 = url.match(/\/jobs\/collections\/.*\/(\d+)/);
     if (jobPathMatch2 && jobPathMatch2[1]) {
       return jobPathMatch2[1];
     }
-    
+
     // Try additional LinkedIn formats
     const jobDetailsMatch = url.match(/\/details\/(\d+)/);
     if (jobDetailsMatch && jobDetailsMatch[1]) {
       return jobDetailsMatch[1];
     }
-    
+
     return null;
   } catch (error) {
     console.error("Error extracting job ID:", error);
@@ -67,112 +67,138 @@ function extractJobId() {
 // Function to extract job title and description from LinkedIn
 function extractJobDetails() {
   try {
-    // More comprehensive selectors for LinkedIn job pages (multiple possible selectors)
+    // Updated selectors for LinkedIn job pages (January 2026)
     const possibleJobTitleSelectors = [
+      // Primary: the h1 inside job title container
+      '.job-details-jobs-unified-top-card__job-title h1',
       '.job-details-jobs-unified-top-card__job-title',
-      '.topcard__title',
+      // Fallbacks
+      'h1.t-24.t-bold',
+      'h1.t-24',
+      '.jobs-unified-top-card__job-title h1',
       '.jobs-unified-top-card__job-title',
-      'h1.t-24', // More generic LinkedIn heading
-      'h2.job-title',
-      '.jobs-details-top-card__job-title'
+      '.topcard__title',
+      '.t-24.job-details-jobs-unified-top-card__job-title'
     ];
-    
+
     const possibleJobDescriptionSelectors = [
+      // Primary: the job details container
+      '#job-details',
       '.jobs-description-content__text',
       '.jobs-box__html-content',
-      '.description__text',
+      '.jobs-description__content',
       '.jobs-description',
-      '#job-details',
-      '.jobs-details__main-content'
+      '.description__text'
     ];
-    
-    // New selectors for job location
+
+    // Updated selectors for job location
     const possibleJobLocationSelectors = [
+      // Primary: first tvm__text span in tertiary description
+      '.job-details-jobs-unified-top-card__tertiary-description-container .tvm__text:first-child',
+      '.job-details-jobs-unified-top-card__tertiary-description-container .tvm__text',
       '.job-details-jobs-unified-top-card__bullet',
-      '.job-details-jobs-unified-top-card__tertiary-description-container span.tvm__text'
+      '.jobs-unified-top-card__bullet',
+      '.topcard__flavor--bullet'
     ];
-    
-    // New selectors for company information
+
+    // Updated selectors for company information
     const possibleCompanyNameSelectors = [
+      // Primary: company name link
       '.job-details-jobs-unified-top-card__company-name a',
       '.job-details-jobs-unified-top-card__company-name',
       '.jobs-unified-top-card__company-name a',
       '.jobs-unified-top-card__company-name',
-      '.topcard__org-name-link'
+      '.topcard__org-name-link',
+      '.jobs-company__box a[href*="/company/"]'
     ];
-    
+
     // Try to find job title using different selectors
     let jobTitleElement = null;
+    let jobTitle = "Unknown Job Title";
+
     for (const selector of possibleJobTitleSelectors) {
       jobTitleElement = document.querySelector(selector);
-      if (jobTitleElement) break;
+      if (jobTitleElement) {
+        // Get direct text content, handling nested elements
+        jobTitle = jobTitleElement.innerText || jobTitleElement.textContent;
+        jobTitle = jobTitle.trim();
+        if (jobTitle && jobTitle !== "Unknown Job Title") {
+          console.log("Job Hunter: Found title with selector:", selector);
+          break;
+        }
+      }
     }
-    
+
     // Try to find job description using different selectors
     let jobDescriptionElement = null;
+    let jobDescription = "No description available";
+
     for (const selector of possibleJobDescriptionSelectors) {
       jobDescriptionElement = document.querySelector(selector);
-      if (jobDescriptionElement) break;
+      if (jobDescriptionElement) {
+        jobDescription = jobDescriptionElement.innerText || jobDescriptionElement.textContent;
+        jobDescription = jobDescription.trim();
+        if (jobDescription && jobDescription.length > 50) {
+          console.log("Job Hunter: Found description with selector:", selector);
+          break;
+        }
+      }
     }
-    
+
     // Try to find job location using different selectors
     let jobLocationElement = null;
+    let jobLocation = "Unknown Location";
+
     for (const selector of possibleJobLocationSelectors) {
       jobLocationElement = document.querySelector(selector);
-      if (jobLocationElement) break;
+      if (jobLocationElement) {
+        jobLocation = jobLocationElement.innerText || jobLocationElement.textContent;
+        jobLocation = jobLocation.trim();
+        // Clean up location text
+        jobLocation = jobLocation.replace(/Remote/i, '').trim();
+        if (jobLocation && jobLocation !== "Unknown Location" && !jobLocation.includes('day ago') && !jobLocation.includes('applicant')) {
+          console.log("Job Hunter: Found location with selector:", selector);
+          break;
+        }
+      }
     }
-    
+
+    // If location still contains unwanted text, try to extract just the location part
+    if (jobLocation.includes('·')) {
+      jobLocation = jobLocation.split('·')[0].trim();
+    }
+
     // Try to find company information using different selectors
     let companyNameElement = null;
-    for (const selector of possibleCompanyNameSelectors) {
-      companyNameElement = document.querySelector(selector);
-      if (companyNameElement) break;
-    }
-    
-    // Extract text content or use fallbacks
-    let jobTitle = "Unknown Job Title";
-    let jobDescription = "No description available";
-    let jobLocation = "Unknown Location";
     let companyName = "Unknown Company";
     let companyUrl = "";
-    
-    if (jobTitleElement) {
-      jobTitle = jobTitleElement.textContent.trim();
-    }
-    
-    if (jobDescriptionElement) {
-      jobDescription = jobDescriptionElement.textContent.trim();
-    }
-    
-    if (jobLocationElement) {
-      jobLocation = jobLocationElement.textContent.trim();
-      // Clean up location text (remove "Remote", etc.)
-      jobLocation = jobLocation.replace(/Remote/i, '').trim();
-      // If the location has comma, keep only city and state/country
-      if (jobLocation.includes(',')) {
-        const locationParts = jobLocation.split(',');
-        if (locationParts.length >= 2) {
-          jobLocation = locationParts.slice(0, 3).join(',').trim();
+
+    for (const selector of possibleCompanyNameSelectors) {
+      companyNameElement = document.querySelector(selector);
+      if (companyNameElement) {
+        companyName = companyNameElement.innerText || companyNameElement.textContent;
+        companyName = companyName.trim();
+
+        // Extract company URL if it's a link element
+        if (companyNameElement.tagName.toLowerCase() === 'a' && companyNameElement.href) {
+          companyUrl = companyNameElement.href;
+        } else {
+          // If the company name element is not a link, look for a link inside it
+          const companyLink = companyNameElement.querySelector('a');
+          if (companyLink && companyLink.href) {
+            companyUrl = companyLink.href;
+            companyName = companyLink.innerText || companyLink.textContent;
+            companyName = companyName.trim();
+          }
+        }
+
+        if (companyName && companyName !== "Unknown Company") {
+          console.log("Job Hunter: Found company with selector:", selector);
+          break;
         }
       }
     }
-    
-    if (companyNameElement) {
-      // Extract company name
-      companyName = companyNameElement.textContent.trim();
-      
-      // Extract company URL if it's a link element
-      if (companyNameElement.tagName.toLowerCase() === 'a' && companyNameElement.href) {
-        companyUrl = companyNameElement.href;
-      } else {
-        // If the company name element is not a link, look for a link inside it
-        const companyLink = companyNameElement.querySelector('a');
-        if (companyLink && companyLink.href) {
-          companyUrl = companyLink.href;
-        }
-      }
-    }
-    
+
     // Debug info
     console.log("Job Hunter: Extracted job title:", jobTitle);
     console.log("Job Hunter: Extracted job location:", jobLocation);
@@ -182,7 +208,7 @@ function extractJobDetails() {
 
     // Get the current job post URL
     const jobPostUrl = window.location.href;
-    
+
     // Extract job ID
     const jobId = extractJobId();
     console.log("Job Hunter: Extracted job ID:", jobId);
@@ -217,7 +243,7 @@ window.addEventListener('load', () => {
     chrome.runtime.sendMessage({
       action: "checkJobInHistory",
       jobId: jobId
-    }, function(response) {
+    }, function (response) {
       console.log("content.js: Initial job history check response:", response);
       // We'll let jobIndicator.js handle showing the indicator
     });
