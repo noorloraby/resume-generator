@@ -44,10 +44,15 @@ app.add_middleware(
 # AI Provider Configuration
 AI_PROVIDER = os.getenv("AI_PROVIDER", "groq").lower()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "meta-llama/llama-4-maverick")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-4-maverick:free")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+# Log configuration on startup
+logger.info(f"AI Provider: {AI_PROVIDER}")
+logger.info(f"GROQ_API_KEY configured: {'Yes' if GROQ_API_KEY else 'No (MISSING!)'}")
+logger.info(f"GROQ_MODEL: {GROQ_MODEL}")
 
 # Template and output paths
 TEMPLATE_PATH = "template.tex"
@@ -59,12 +64,15 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # Initialize Groq client if using Groq provider
 groq_client = None
 if AI_PROVIDER == "groq":
-    try:
-        from groq import Groq
-        groq_client = Groq(api_key=GROQ_API_KEY)
-        logger.info("Groq client initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize Groq client: {e}")
+    if not GROQ_API_KEY:
+        logger.error("GROQ_API_KEY environment variable is not set! AI generation will fail.")
+    else:
+        try:
+            from groq import Groq
+            groq_client = Groq(api_key=GROQ_API_KEY)
+            logger.info("Groq client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize Groq client: {e}")
 
 
 def call_ai_api(system_prompt: str, user_prompt: str) -> str:
