@@ -6,14 +6,13 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Install system dependencies including TeX Live for pdflatex
+# Note: Using minimal TeX packages to keep image size manageable
 RUN apt-get update && apt-get install -y --no-install-recommends \
     texlive-latex-base \
     texlive-latex-recommended \
     texlive-latex-extra \
     texlive-fonts-recommended \
-    texlive-fonts-extra \
     lmodern \
-    cm-super \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
